@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->enum('role', ['team-field', 'field-manager', 'manager']);
+            $table->string('number');
+            $table->string('picture');
+            $table->string('mandatory');
+            $table->enum('status', ['in', 'onHand', 'out'])->default('in');
+            $table->enum('condition', ['good', 'bad'])->nullable();
+            $table->bigInteger('type_id');
+            $table->bigInteger('customer_id')->nullable();
             $table->bigInteger('created_by');
             $table->bigInteger('updated_by');
             $table->timestamps();
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('devices');
     }
 };

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DeviceController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Route::get('/device/create', [DeviceController::class, 'createDevice']);
+Route::get('/device/in', [DeviceController::class, 'listInDevice']);
+Route::get('/device/on-hand-good', [DeviceController::class, 'onHandGood']);
+Route::get('/device/on-hand-bad', [DeviceController::class, 'onHandBad']);
+Route::get('/device/out', [DeviceController::class, 'listOutDevice']);

@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Customer;
+use App\Models\Device;
+use App\Models\Type;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,11 +17,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+       User::factory(2)->create();
+       User::factory(2)->teamField()->create();
+       User::factory(2)->manager()->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+       Type::factory(9)->create();
+
+       Device::factory(10)->create();
+       Device::factory(10)->in()->create();
+       Device::factory(10)->onHandBad()->create();
+       Device::factory(10)->outGood()->create();
+
+       Customer::factory(3)->create();
+       Customer::factory(3)->newCustomer()->create();
     }
 }
