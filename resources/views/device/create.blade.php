@@ -1,26 +1,55 @@
 @extends('layouts.main')
 
 @section('content')
-
-<div class="row">
-    <div class="col-md-6">
-        <form>
-            <div class="mb-3">
-              <label for="number" class="form-label">Serial Number</label>
-              <input type="text" class="form-control"  autocomplete="off" autofocus>
-            </div>
-            <div class="mb-3">
-              <label for="type_id" class="form-label">Model</label>
-              <select class="form-select" id="type_id" name="type_id">
-                <option selected>-- Pilih Model --</option>
-                @foreach ($types as $type)
-                    <option value="{{ $type->id }}">{{ $type->model . " - " . $type->type . " - " . $type->desc }}</option>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/device/create" method="POST" enctype="multipart/form-data">
+                @csrf
+                @foreach ($errors->all() as $error)
+                    <script>
+                        alert('File harus berupa gambar')
+                    </script>
                 @endforeach
-              </select>
-            </div>
-            <button type="submit" class="btn btn-success">Simpan</button>
-        </form>
+                <div class="mb-3">
+                    <label for="picture" class="form-label">Foto Perangkat</label>
+                    <input class="form-control" type="file" id="picture" name="picture" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mandatory" class="form-label">Foto Perangkat</label>
+                    <input class="form-control" type="file" id="mandatory" name="mandatory" required>
+                </div>
+                <div class="mb-3">
+                    <label for="number" class="form-label">Serial Number</label>
+                    <input type="text" class="form-control" id="number" name="number" required autocomplete="off"
+                        autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="type_id" class="form-label">Model</label>
+                    <select class="form-select" id="type_id" name="type_id" required>
+                        <option selected value="">-- Pilih Model --</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}">
+                                {{ $type->model . ' - ' . $type->type . ' - ' . $type->desc }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="registration" class="form-label">Nomer Registrasi</label>
+                    <input type="text" class="form-control" id="registration" name="registration" required
+                        autocomplete="off" autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nama</label>
+                    <input type="text" class="form-control" id="name" name="name" required autocomplete="off"
+                        autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Alamat</label>
+                    <input type="text" class="form-control" id="address" name="address" required autocomplete="off"
+                        autofocus>
+                </div>
+                <button type="submit" class="btn btn-success">Simpan</button>
+            </form>
+        </div>
     </div>
-</div>
-    
 @endsection

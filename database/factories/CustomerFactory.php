@@ -17,7 +17,7 @@ class CustomerFactory extends Factory
     public function definition()
     {
         return [
-            'number' => $this->faker->regexify('[A-Z]{5}[0-9]{3}[A-Z]{5}[0-9]{3}'),
+            'registration' => $this->faker->regexify('[A-Z]{5}[0-9]{3}[A-Z]{5}[0-9]{3}'),
             'name' => $this->faker->name(),
             'address' => $this->faker->citySuffix(),
             'latitude' => null,

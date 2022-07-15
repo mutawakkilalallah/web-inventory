@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
 
        Type::factory(9)->create();
 
-       Device::factory(10)->create();
-       Device::factory(10)->in()->create();
-       Device::factory(10)->onHandBad()->create();
-       Device::factory(10)->outGood()->create();
+       Device::factory(3)->create();
+       Device::factory(3)->in()->create();
+       Device::factory(3)->onHandBad()->create();
+       Device::factory(3)->outGood()->create();
 
        Customer::factory(3)->create();
        Customer::factory(3)->newCustomer()->create();

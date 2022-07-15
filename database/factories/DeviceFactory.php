@@ -54,7 +54,7 @@ class DeviceFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'status' => 'out',
-                'condition' => 'good',               
+                'condition' => 'good',
                 'customer_id' => $this->faker->numberBetween(4, 6),
             ];
         });
