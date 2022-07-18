@@ -194,4 +194,23 @@ class DeviceController extends Controller
 
         return redirect('/device/out');
     }
+
+    public function customer()
+    {
+        $data = [
+            'title' => 'Data Customer',
+            'customers' => DB::table('customers')->get()
+        ];
+
+        return view('device.customer', $data);
+    }
+
+    public function deleteDevice($id)
+    {
+        DB::table('devices')
+            ->where('id', $id)
+            ->delete();
+
+        return redirect()->back();
+    }
 }

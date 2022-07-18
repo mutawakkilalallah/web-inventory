@@ -28,7 +28,8 @@
                     <td>{{ $d->desc }}</td>
                     <td>
                         <a href="#" class="btn btn-warning"><i class="bi bi-pen"></i></a>
-                        <a href="#" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
+                                class="bi bi-trash"></i></a>
                     </td>
                 </tr>
             @endforeach
