@@ -10,8 +10,8 @@
                     <label for="condition" class="form-label">Model</label>
                     <select class="form-select" id="condition" name="condition" required>
                         <option selected value="">-- Pilih Kondisi --</option>
-                        <option value="good">Bagus</option>
-                        <option value="bad">Rusak</option>
+                        <option value="good">good</option>
+                        <option value="bad">bad</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-success">Simpan</button>

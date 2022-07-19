@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('registration');
             $table->string('name');
             $table->string('address');
+            $table->string('district');
             $table->string('longitude')->nullable();
             $table->string('latitude')->nullable();
             $table->enum('status', ['old', 'new',]);

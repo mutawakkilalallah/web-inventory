@@ -14,22 +14,24 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/device/in">Perangkat Lama</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Perangkat on Stock
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/device/on-hand-good">Good</a></li>
-                            <li><a class="dropdown-item" href="/device/on-hand-bad">Bad</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/device/out">Perangkat Baru</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user">User</a>
-                    </li>
+                    @if (auth()->user()->role != 'team-field')
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Perangkat on Stock
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/device/on-hand-good">Good</a></li>
+                                <li><a class="dropdown-item" href="/device/on-hand-bad">Bad</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/device/out">Perangkat Baru</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user">User</a>
+                        </li>
+                    @endif
                     <form action="/logout" method="post">
                         @csrf
                         <li class="nav-item">

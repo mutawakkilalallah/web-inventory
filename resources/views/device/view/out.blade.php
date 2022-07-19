@@ -3,10 +3,11 @@
 @section('content')
     <div id="map" style="height: 500px;"></div>
 
-    <form class="row g-3 mt-3">
+    <form class="row g-3 mt-3" action="/device/out">
         <div class="col-auto">
-            <label for="address" class="visually-hidden">Alamat</label>
-            <input type="text" class="form-control" id="address" placeholder="masukkan alamat ..">
+            <label for="district" class="visually-hidden">Alamat</label>
+            <input type="text" class="form-control" id="district" name="district" placeholder="masukkan kecamatan .."
+                value="{{ request('district') }}">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-success mb-3"><i class="bi bi-search"></i> Cari</button>
@@ -21,10 +22,13 @@
                 <th scope="col">No. Pelanggan</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Alamat</th>
+                <th scope="col">Kecamatan</th>
                 <th scope="col">Model</th>
                 <th scope="col">Tipe</th>
                 <th scope="col">Deskripsi</th>
-                <th scope="col">Action</th>
+                @if (auth()->user()->role == 'field-manager')
+                    <th scope="col">Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -35,14 +39,18 @@
                     <td>{{ $d->registration }}</td>
                     <td>{{ $d->name }}</td>
                     <td>{{ $d->address }}</td>
+                    <td>{{ $d->district }}</td>
                     <td>{{ $d->model }}</td>
                     <td>{{ $d->type }}</td>
                     <td>{{ $d->desc }}</td>
-                    <td>
-                        <a href="#" class="btn btn-warning"><i class="bi bi-pen"></i></a>
-                        <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
-                                class="bi bi-trash"></i></a>
-                    </td>
+                    @if (auth()->user()->role == 'field-manager')
+                        <td>
+                            <a href="/device/edit/{{ $d->device_id }}" class="btn btn-warning"><i
+                                    class="bi bi-pen"></i></a>
+                            <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
+                                    class="bi bi-trash"></i></a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

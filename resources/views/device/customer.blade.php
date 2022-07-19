@@ -8,6 +8,7 @@
                 <th scope="col">No. Registrasi</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Alamat</th>
+                <th scope="col">Kecamatan</th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
                     <td>{{ $c->registration }}</td>
                     <td>{{ $c->name }}</td>
                     <td>{{ $c->address }}</td>
+                    <td>{{ $c->district }}</td>
                     <td>{{ $c->status }}</td>
                 </tr>
             @endforeach

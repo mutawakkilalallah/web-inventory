@@ -9,7 +9,9 @@
                 <th scope="col">Nama</th>
                 <th scope="col">Username</th>
                 <th scope="col">Role</th>
-                <th scope="col">Action</th>
+                @if (auth()->user()->role == 'field-manager')
+                    <th scope="col">Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -19,10 +21,13 @@
                     <td>{{ $u->name }}</td>
                     <td>{{ $u->username }}</td>
                     <td>{{ $u->role }}</td>
-                    <td>
-                        <a href="#" class="btn btn-warning"><i class="bi bi-pen"></i></a>
-                        <a href="/user/delete/{{ $u->id }}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                    </td>
+                    @if (auth()->user()->role == 'field-manager')
+                        <td>
+                            <a href="user/edit/{{ $u->id }}" class="btn btn-warning"><i class="bi bi-pen"></i></a>
+                            <a href="/user/delete/{{ $u->id }}" class="btn btn-danger"><i
+                                    class="bi bi-trash"></i></a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

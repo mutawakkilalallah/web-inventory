@@ -17,18 +17,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       User::factory(2)->create();
-       User::factory(2)->teamField()->create();
-       User::factory(2)->manager()->create();
+        User::factory(1)->create();
+        //    User::factory(2)->teamField()->create();
+        //    User::factory(2)->manager()->create();
 
-       Type::factory(9)->create();
+        Type::factory(9)->create();
 
-       Device::factory(3)->create();
-       Device::factory(3)->in()->create();
-       Device::factory(3)->onHandBad()->create();
-       Device::factory(3)->outGood()->create();
+        //    Device::factory(3)->create();
+        //    Device::factory(3)->in()->create();
+        //    Device::factory(3)->onHandBad()->create();
+        //    Device::factory(3)->outGood()->create();
 
-       Customer::factory(3)->create();
-       Customer::factory(3)->newCustomer()->create();
+        //    Customer::factory(3)->create();
+        //    Customer::factory(3)->newCustomer()->create();
     }
 }

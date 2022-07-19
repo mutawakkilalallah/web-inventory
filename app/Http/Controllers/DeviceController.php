@@ -12,6 +12,13 @@ class DeviceController extends Controller
     {
         $data = [
             'title' => 'Dashboard',
+            'deviceIn' => DB::table('devices')->where('status', "=", "in")->count(),
+            'deviceOnHandGood' => DB::table('devices')->where('status', "=", "onHand")->where('condition', "=", "good")->count(),
+            'deviceOnHandBad' => DB::table('devices')->where('status', "=", "onHand")->where('condition', "=", "bad")->count(),
+            'deviceOut' => DB::table('devices')->where('status', "=", "out")->count(),
+            'userTF' => DB::table('users')->where('role', "=", "team-field")->count(),
+            'userFM' => DB::table('users')->where('role', "=", "field-manager")->count(),
+            'userM' => DB::table('users')->where('role', "=", "manager")->count(),
         ];
 
         return view('home', $data);
@@ -21,7 +28,7 @@ class DeviceController extends Controller
     {
         $data = [
             'title' => 'Tambah Perangkat',
-            'types' => DB::table('types')->get()
+            'types' => DB::table('types')->get(),
         ];
 
         return view('device.create', $data);
@@ -44,33 +51,101 @@ class DeviceController extends Controller
             'mandatory' => $mandatory,
             'status' => 'in',
             'type_id' => $request->input('type_id'),
-            'created_by' => 1,
+            'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
-            'updated_by' => 1,
+            'updated_by' => auth()->user()->id,
             'updated_at' => new DateTime(),
         ]);
 
         DB::table('customers')->insert([
-            'registration' => $request->input('registration'),
+            'registration' => "SO" . $request->input('registration'),
             'name' => $request->input('name'),
             'status' => 'old',
             'address' => $request->input('address'),
-            'created_by' => 1,
+            'district' => $request->input('district'),
+            'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
-            'updated_by' => 1,
+            'updated_by' => auth()->user()->id,
             'updated_at' => new DateTime(),
         ]);
 
         return redirect('/device/in');
     }
 
+    public function editDevice($id)
+    {
+        $device = DB::table('devices')->where('devices.id', $id)
+            ->join('types', 'devices.type_id', '=', 'types.id')
+            ->select('devices.*', 'types.*', 'devices.id as device_id', 'devices.status as device_status', 'types.id as type_id')
+            ->first();
+
+        if ($device->status == "out") {
+            $device = DB::table('devices')->where('devices.id', $id)
+                ->join('types', 'devices.type_id', '=', 'types.id')
+                ->join('customers', 'devices.customer_id', '=', 'customers.id')
+                ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'devices.status as device_status', 'customers.id as customer_id', 'types.id as type_id')
+                ->first();
+
+            $device->registration = substr($device->registration, 2);
+        }
+
+        $data = [
+            'title' => 'Edit Perangkat',
+            'device' => $device,
+            'types' => DB::table('types')->get(),
+        ];
+
+        return view('device.edit', $data);
+    }
+
+    public function updateDevice($id, Request $request)
+    {
+        DB::table('devices')->where('id', $id)
+            ->update([
+                'number' => $request->input('number'),
+                'type_id' => $request->input('type_id'),
+                'condition' => $request->input('condition'),
+                'updated_by' => auth()->user()->id,
+                'updated_at' => new DateTime(),
+            ]);
+
+        DB::table('customers')->where('id', $request->input('customer_id'))
+            ->update([
+                'registration' => "SO" . $request->input('registration'),
+                'name' => $request->input('name'),
+                'address' => $request->input('address'),
+                'district' => $request->input('district'),
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+                'updated_by' => auth()->user()->id,
+                'updated_at' => new DateTime(),
+            ]);
+
+        $status = $request->input('device_status');
+
+        if ($status == "onHand") {
+            $status = "on-hand-" . $request->input('condition');
+        }
+
+        return redirect('/device' . "/" . $status);
+    }
+
     public function listInDevice()
     {
-        $devices = DB::table('devices')
-            ->where('status', "=", 'in')
-            ->join('types', 'devices.type_id', '=', 'types.id')
-            ->select('devices.*', 'types.*', 'devices.id as device_id', 'types.id as type_id')
-            ->get();
+        if (auth()->user()->role == "team-field") {
+            $devices = DB::table('devices')
+                ->where('status', "=", 'in')
+                ->where('created_by', auth()->user()->id)
+                ->join('types', 'devices.type_id', '=', 'types.id')
+                ->select('devices.*', 'types.*', 'devices.id as device_id', 'types.id as type_id')
+                ->get();
+        } else {
+            $devices = DB::table('devices')
+                ->where('status', "=", 'in')
+                ->join('types', 'devices.type_id', '=', 'types.id')
+                ->select('devices.*', 'types.*', 'devices.id as device_id', 'types.id as type_id')
+                ->get();
+        }
 
         $data = [
             'title' => 'Perangkat Lama',
@@ -116,12 +191,24 @@ class DeviceController extends Controller
 
     public function listOutDevice()
     {
-        $devices = DB::table('devices')
-            ->where('devices.status', "=", 'out')
-            ->join('types', 'devices.type_id', '=', 'types.id')
-            ->join('customers', 'devices.customer_id', '=', 'customers.id')
-            ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'customers.id as customer_id', 'types.id as type_id')
-            ->get();
+        if (request('district')) {
+            $devices = DB::table('devices')
+                ->where('devices.status', "=", 'out')
+                ->join('types', 'devices.type_id', '=', 'types.id')
+                ->join('customers', function ($join) {
+                    $join->on('devices.customer_id', '=', 'customers.id')
+                        ->where('district', request('district'));
+                })
+                ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'customers.id as customer_id', 'types.id as type_id')
+                ->get();
+        } else {
+            $devices = DB::table('devices')
+                ->where('devices.status', "=", 'out')
+                ->join('types', 'devices.type_id', '=', 'types.id')
+                ->join('customers', 'devices.customer_id', '=', 'customers.id')
+                ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'customers.id as customer_id', 'types.id as type_id')
+                ->get();
+        }
 
         $data = [
             'title' => 'Perangkat Baru',
@@ -172,16 +259,17 @@ class DeviceController extends Controller
     public function sellDeviceToCustomer($id, Request $request)
     {
         $customer_id = DB::table('customers')->insertGetId([
-            'registration' => $request->input('registration'),
+            'registration' => "SO" . $request->input('registration'),
             'name' => $request->input('name'),
             'status' => 'new',
             'address' => $request->input('address'),
+            'district' => $request->input('district'),
             'latitude' => $request->input('latitude'),
             'longitude' => $request->input('longitude'),
             'device_id' => $id,
-            'created_by' => 1,
+            'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
-            'updated_by' => 1,
+            'updated_by' => auth()->user()->id,
             'updated_at' => new DateTime(),
         ]);
 
@@ -197,9 +285,17 @@ class DeviceController extends Controller
 
     public function customer()
     {
+        if (auth()->user()->role == "team-field") {
+            $customers = DB::table('customers')
+                ->where('created_by', auth()->user()->id)
+                ->get();
+        } else {
+            $customers = DB::table('customers')->get();
+        }
+
         $data = [
             'title' => 'Data Customer',
-            'customers' => DB::table('customers')->get()
+            'customers' => $customers
         ];
 
         return view('device.customer', $data);

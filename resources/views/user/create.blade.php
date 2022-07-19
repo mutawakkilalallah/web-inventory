@@ -21,7 +21,7 @@
                     <label for="role" class="form-label">Hak Akses</label>
                     <select class="form-select" id="role" name="role" required>
                         <option selected value="">-- Pilih Hak Akses --</option>
-                        <option value="admin-field">admin-field</option>
+                        <option value="team-field">team-field</option>
                         <option value="field-manager">field-manager</option>
                         <option value="manager">manager</option>
                     </select>

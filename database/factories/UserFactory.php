@@ -18,14 +18,26 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'username' => $this->faker->userName(),
+            'name' => "Mrs. Rifqohh",
+            'username' => "cahh",
             'password' => Hash::make(1234),
             'role' => 'field-manager',
-            'created_by' => $this->faker->numberBetween(3, 4),
-            'updated_by' => $this->faker->numberBetween(3, 4),
+            'created_by' => 1,
+            'updated_by' => 1,
         ];
     }
+
+    // public function definition()
+    // {
+    //     return [
+    //         'name' => $this->faker->name(),
+    //         'username' => $this->faker->userName(),
+    //         'password' => Hash::make(1234),
+    //         'role' => 'field-manager',
+    //         'created_by' => $this->faker->numberBetween(3, 4),
+    //         'updated_by' => $this->faker->numberBetween(3, 4),
+    //     ];
+    // }
 
     public function teamField()
     {
@@ -44,5 +56,4 @@ class UserFactory extends Factory
             ];
         });
     }
-
 }

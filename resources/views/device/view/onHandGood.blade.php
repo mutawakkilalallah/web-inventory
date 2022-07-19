@@ -11,7 +11,9 @@
                 <th scope="col">Model</th>
                 <th scope="col">Tipe</th>
                 <th scope="col">Deskripsi</th>
-                <th scope="col">Action</th>
+                @if (auth()->user()->role == 'field-manager')
+                    <th scope="col">Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -28,13 +30,16 @@
                     <td>{{ $d->model }}</td>
                     <td>{{ $d->type }}</td>
                     <td>{{ $d->desc }}</td>
-                    <td>
-                        <a href="#" class="btn btn-warning"><i class="bi bi-pen"></i></a>
-                        <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
-                                class="bi bi-trash"></i></a>
-                        <a href="/device/sell/{{ $d->device_id }}" class="btn btn-success"><i
-                                class="bi bi-cart-check"></i></a>
-                    </td>
+                    @if (auth()->user()->role == 'field-manager')
+                        <td>
+                            <a href="/device/edit/{{ $d->device_id }}" class="btn btn-warning"><i
+                                    class="bi bi-pen"></i></a>
+                            <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
+                                    class="bi bi-trash"></i></a>
+                            <a href="/device/sell/{{ $d->device_id }}" class="btn btn-success"><i
+                                    class="bi bi-cart-check"></i></a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

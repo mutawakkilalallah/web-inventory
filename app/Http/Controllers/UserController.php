@@ -36,13 +36,13 @@ class UserController extends Controller
             'username' => $request->input('username'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
-            'created_by' => 1,
+            'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
-            'updated_by' => 1,
+            'updated_by' => auth()->user()->id,
             'updated_at' => new DateTime(),
         ]);
 
-        return redirect('/');
+        return redirect('/user');
     }
 
     public function login()
@@ -81,5 +81,43 @@ class UserController extends Controller
             ->delete();
 
         return redirect()->back();
+    }
+
+    public function edit($id)
+    {
+        $data = [
+            'title' => 'Tambah User',
+            'user' => DB::table('users')
+                ->where('id', $id)
+                ->first(),
+        ];
+
+        return view('user.edit', $data);
+    }
+
+    public function update($id, Request $request)
+    {
+        DB::table('users')->where('id', $id)
+            ->update([
+                'name' => $request->input('name'),
+                'username' => $request->input('username'),
+                'role' => $request->input('role'),
+                'updated_by' => auth()->user()->id,
+                'updated_at' => new DateTime(),
+            ]);
+
+        return redirect('/user');
+    }
+
+    public function updatePassword($id, Request $request)
+    {
+        DB::table('users')->where('id', $id)
+            ->update([
+                'password' => Hash::make($request->input('password')),
+                'updated_by' => auth()->user()->id,
+                'updated_at' => new DateTime(),
+            ]);
+
+        return redirect('/user');
     }
 }

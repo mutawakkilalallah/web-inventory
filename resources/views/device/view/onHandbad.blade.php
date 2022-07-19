@@ -11,26 +11,33 @@
                 <th scope="col">Model</th>
                 <th scope="col">Tipe</th>
                 <th scope="col">Deskripsi</th>
-                <th scope="col">Action</th>
+                @if (auth()->user()->role == 'field-manager')
+                    <th scope="col">Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
             @foreach ($devices as $i => $d)
                 <tr class="text-center align-middle">
                     <th scope="row">{{ $i + 1 }}</th>
-                    <td><img src="https://source.unsplash.com/100x100/?router" width="100" class="img-thumbnail"></td>
-                    <td><img src="https://source.unsplash.com/100x100/?customer" width="100" class="img-thumbnail"></td>
-                    {{-- <td><img src="{{ $d->picture }}" width="100" class="img-thumbnail"></td>
-                    <td><img src="{{ $d->mandatory }}" width="100" class="img-thumbnail"></td> --}}
+                    <td>
+                        <img src="{{ asset('storage/' . $d->picture) }}" width="100" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        <img src="{{ asset('storage/' . $d->mandatory) }}" width="100" class="img-thumbnail" />
+                    </td>
                     <td>{{ $d->number }}</td>
                     <td>{{ $d->model }}</td>
                     <td>{{ $d->type }}</td>
                     <td>{{ $d->desc }}</td>
-                    <td>
-                        <a href="#" class="btn btn-warning"><i class="bi bi-pen"></i></a>
-                        <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
-                                class="bi bi-trash"></i></a>
-                    </td>
+                    @if (auth()->user()->role == 'field-manager')
+                        <td>
+                            <a href="/device/edit/{{ $d->device_id }}" class="btn btn-warning"><i
+                                    class="bi bi-pen"></i></a>
+                            <a href="/device/delete/{{ $d->device_id }}" class="btn btn-danger"><i
+                                    class="bi bi-trash"></i></a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>
