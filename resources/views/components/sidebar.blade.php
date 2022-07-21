@@ -36,6 +36,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/customer" class="nav-link {{ $title == 'Customer' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Customer
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/device/in" class="nav-link {{ $title == 'Perangkat Masuk' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-inbox"></i>
                         <p>
@@ -43,38 +51,42 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/device/on-hand-good" class="nav-link {{ $title == 'Perangkat Bagus' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-check-double"></i>
-                        <p>
-                            Perangkat Bagus
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/device/on-hand-bad" class="nav-link {{ $title == 'Perangkat Rusak' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-times-circle"></i>
-                        <p>
-                            Perangkat Rusak
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/device/out" class="nav-link {{ $title == 'Perangkat Keluar' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                            Perangkat Terjual
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/user" class="nav-link {{ $title == 'User' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users-cog"></i>
-                        <p>
-                            User
-                        </p>
-                    </a>
-                </li>
+                @if (auth()->user()->role != 'team-field')
+                    <li class="nav-item">
+                        <a href="/device/on-hand-good"
+                            class="nav-link {{ $title == 'Perangkat Bagus' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-check-double"></i>
+                            <p>
+                                Perangkat Bagus
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/device/on-hand-bad"
+                            class="nav-link {{ $title == 'Perangkat Rusak' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-times-circle"></i>
+                            <p>
+                                Perangkat Rusak
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/device/out" class="nav-link {{ $title == 'Perangkat Keluar' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-shopping-cart"></i>
+                            <p>
+                                Perangkat Terjual
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user" class="nav-link {{ $title == 'User' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users-cog"></i>
+                            <p>
+                                User
+                            </p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <form action="/logout" method="post">
                         @csrf

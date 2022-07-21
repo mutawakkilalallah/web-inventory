@@ -2,6 +2,17 @@
 
 @section('content')
     <div id="map" style="height: 500px;"></div>
+
+    <form class="row g-3 mt-3" action="/device/out">
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="district" name="district" placeholder="masukkan kecamatan .."
+                value="{{ request('district') }}">
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-success mb-3"><i class="bi bi-search"></i> Cari</button>
+        </div>
+    </form>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -56,14 +67,17 @@
 
     <script>
         var d = <?php echo json_encode($devices); ?>;
+
         var map = L.map('map').setView([d[0].latitude, d[0].longitude], 12);
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     maxZoom: 19,
-        //     attribution: '© Web GIS 2022'
-        // }).addTo(map);
-        // for (let i = 0; i < d.length; i++) {
-        //     console.log(d[i].latitude);
-        //     var marker = L.marker([d[i].latitude, d[i].longitude]).addTo(map);
-        // }
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© Web GIS 2022'
+        }).addTo(map);
+
+
+        for (let i = 0; i < d.length; i++) {
+            console.log(d[i].latitude);
+            var marker = L.marker([d[i].latitude, d[i].longitude]).addTo(map);
+        }
     </script>
 @endsection

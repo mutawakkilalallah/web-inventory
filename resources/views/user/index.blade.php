@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
+    <a href="/user/create" class="btn btn-success mb-4"><i class="bi bi-plus-square"></i> Tambah User</a>
     <div class="row">
         <div class="col-12">
             <div class="card">
