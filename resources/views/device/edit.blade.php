@@ -76,6 +76,31 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="registration" class="form-label">Nomer Registrasi</label>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">SO</span>
+                        <input type="text" class="form-control" id="registration"
+                            value="{{ $device->registration }}" name="registration" aria-describedby="basic-addon1"
+                            autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="name" value="{{ $device->name }}"
+                            name="name" required autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Alamat</label>
+                        <input type="text" class="form-control" id="address" value="{{ $device->address }}"
+                            name="address" required autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label for="district" class="form-label">Kecamatan</label>
+                        <input type="text" class="form-control" id="district" value="{{ $device->district }}"
+                            name="district" required autocomplete="off">
+                    </div>
+                    <input type="hidden" name="customer_id" value="{{ $device->customer_id }}">
                 @elseif ($device->device_status == 'onHand')
                     <input type="hidden" name="number" value="{{ $device->number }}">
                     <input type="hidden" name="type_id" value="{{ $device->type_id }}">

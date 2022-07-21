@@ -45,24 +45,25 @@ class DeviceController extends Controller
         $picture = $request->file('picture')->store('upload');
         $mandatory = $request->file('mandatory')->store('upload');
 
-        DB::table('devices')->insert([
-            'number' => $request->input('number'),
-            'picture' => $picture,
-            'mandatory' => $mandatory,
-            'status' => 'in',
-            'type_id' => $request->input('type_id'),
+        $customer_id = DB::table('customers')->insertGetId([
+            'registration' => "SO" . $request->input('registration'),
+            'name' => $request->input('name'),
+            'status' => 'old',
+            'address' => $request->input('address'),
+            'district' => $request->input('district'),
             'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
             'updated_by' => auth()->user()->id,
             'updated_at' => new DateTime(),
         ]);
 
-        DB::table('customers')->insert([
-            'registration' => "SO" . $request->input('registration'),
-            'name' => $request->input('name'),
-            'status' => 'old',
-            'address' => $request->input('address'),
-            'district' => $request->input('district'),
+        DB::table('devices')->insert([
+            'number' => $request->input('number'),
+            'picture' => $picture,
+            'mandatory' => $mandatory,
+            'customer_id' => $customer_id,
+            'status' => 'in',
+            'type_id' => $request->input('type_id'),
             'created_by' => auth()->user()->id,
             'created_at' => new DateTime(),
             'updated_by' => auth()->user()->id,
@@ -76,7 +77,8 @@ class DeviceController extends Controller
     {
         $device = DB::table('devices')->where('devices.id', $id)
             ->join('types', 'devices.type_id', '=', 'types.id')
-            ->select('devices.*', 'types.*', 'devices.id as device_id', 'devices.status as device_status', 'types.id as type_id')
+            ->join('customers', 'devices.customer_id', '=', 'customers.id')
+            ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'devices.status as device_status', 'customers.id as customer_id', 'types.id as type_id')
             ->first();
 
         if ($device->status == "out") {
