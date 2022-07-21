@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Data User',
+            'title' => 'User',
             'users' => DB::table('users')->get()
         ];
 

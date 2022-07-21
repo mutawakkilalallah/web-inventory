@@ -150,7 +150,7 @@ class DeviceController extends Controller
         }
 
         $data = [
-            'title' => 'Perangkat Lama',
+            'title' => 'Perangkat Masuk',
             'devices' => $devices
         ];
 
@@ -167,7 +167,7 @@ class DeviceController extends Controller
             ->get();
 
         $data = [
-            'title' => 'Perangkat On Stock (Bagus)',
+            'title' => 'Perangkat Bagus',
             'devices' => $devices
         ];
 
@@ -184,7 +184,7 @@ class DeviceController extends Controller
             ->get();
 
         $data = [
-            'title' => 'Perangkat On Stock (Rusak)',
+            'title' => 'Perangkat Rusak',
             'devices' => $devices
         ];
 
@@ -213,7 +213,7 @@ class DeviceController extends Controller
         }
 
         $data = [
-            'title' => 'Perangkat Baru',
+            'title' => 'Perangkat Terjual',
             'devices' => $devices
         ];
 
@@ -296,7 +296,7 @@ class DeviceController extends Controller
         }
 
         $data = [
-            'title' => 'Data Customer',
+            'title' => 'Customer',
             'customers' => $customers
         ];
 
