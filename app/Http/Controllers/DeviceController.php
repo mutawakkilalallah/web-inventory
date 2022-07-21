@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class DeviceController extends Controller
 {
+    // controller untuk halaman dashboard
     public function index()
     {
+        // mengambil jumlah dari masing-masing data untuk halaman dashboard
         $data = [
             'title' => 'Dashboard',
             'deviceIn' => DB::table('devices')->where('status', "=", "in")->count(),
@@ -24,6 +26,7 @@ class DeviceController extends Controller
         return view('home', $data);
     }
 
+    // controller untuk halaman tambah perangkat
     public function createDevice()
     {
         $data = [
@@ -34,17 +37,21 @@ class DeviceController extends Controller
         return view('device.create', $data);
     }
 
+    // controller untuk halaman simpan perangkat
     public function saveDevice(Request $request)
     {
 
+        // validasi gambar harus berbentuk gambar
         $validated = $request->validate([
             'picture' => 'image|file',
             'mandatory' => 'image|file'
         ]);
 
+        // jika gambar valid di simpan ke storage
         $picture = $request->file('picture')->store('upload');
         $mandatory = $request->file('mandatory')->store('upload');
 
+        // menyimpan data customer
         $customer_id = DB::table('customers')->insertGetId([
             'registration' => "SO" . $request->input('registration'),
             'name' => $request->input('name'),
@@ -57,6 +64,7 @@ class DeviceController extends Controller
             'updated_at' => new DateTime(),
         ]);
 
+        // menyimpan data perangkat
         DB::table('devices')->insert([
             'number' => $request->input('number'),
             'picture' => $picture,
@@ -73,14 +81,18 @@ class DeviceController extends Controller
         return redirect('/device/in');
     }
 
+    // controller untuk halaman edit perangkat
     public function editDevice($id)
     {
+
+        // mengambil data perangkat
         $device = DB::table('devices')->where('devices.id', $id)
             ->join('types', 'devices.type_id', '=', 'types.id')
             ->join('customers', 'devices.customer_id', '=', 'customers.id')
             ->select('devices.*', 'types.*', 'customers.*', 'devices.id as device_id', 'devices.status as device_status', 'customers.id as customer_id', 'types.id as type_id')
             ->first();
 
+        // mengambil data perangkat jika status sudah out/terjual
         if ($device->status == "out") {
             $device = DB::table('devices')->where('devices.id', $id)
                 ->join('types', 'devices.type_id', '=', 'types.id')
@@ -100,8 +112,10 @@ class DeviceController extends Controller
         return view('device.edit', $data);
     }
 
+    // controller untuk update perangkat
     public function updateDevice($id, Request $request)
     {
+        // update device
         DB::table('devices')->where('id', $id)
             ->update([
                 'number' => $request->input('number'),
@@ -111,6 +125,7 @@ class DeviceController extends Controller
                 'updated_at' => new DateTime(),
             ]);
 
+        // update customer
         DB::table('customers')->where('id', $request->input('customer_id'))
             ->update([
                 'registration' => "SO" . $request->input('registration'),
@@ -125,6 +140,7 @@ class DeviceController extends Controller
 
         $status = $request->input('device_status');
 
+        // logic return ke halaman sesuai kondisi perangkat
         if ($status == "onHand") {
             $status = "on-hand-" . $request->input('condition');
         }
@@ -132,6 +148,7 @@ class DeviceController extends Controller
         return redirect('/device' . "/" . $status);
     }
 
+    // controller halaman perangkat masuk
     public function listInDevice()
     {
         if (auth()->user()->role == "team-field") {
@@ -157,6 +174,7 @@ class DeviceController extends Controller
         return view('device.view.in', $data);
     }
 
+    // controller halaman perangkat bagus
     public function onHandGood()
     {
         $devices = DB::table('devices')
@@ -174,6 +192,7 @@ class DeviceController extends Controller
         return view('device.view.onHandGood', $data);
     }
 
+    // controller halaman perangkat rusak
     public function onHandBad()
     {
         $devices = DB::table('devices')
@@ -191,6 +210,8 @@ class DeviceController extends Controller
         return view('device.view.onHandBad', $data);
     }
 
+
+    // controller halaman perangkat terjual
     public function listOutDevice()
     {
         if (request('district')) {
@@ -220,6 +241,7 @@ class DeviceController extends Controller
         return view('device.view.out', $data);
     }
 
+    // controller halaman verifikasi perangkat
     public function verifyDevice($id)
     {
         $data = [
@@ -230,6 +252,7 @@ class DeviceController extends Controller
         return view('device.verify', $data);
     }
 
+    // fungsi verifikasi perangkat
     public function verifyConditionDevice($id, Request $request)
     {
         DB::table('devices')
@@ -242,6 +265,7 @@ class DeviceController extends Controller
         return redirect('/device/in');
     }
 
+    // controller halaman jual perangkat
     public function sellDevice($id)
     {
         $device = DB::table('devices')
@@ -258,6 +282,7 @@ class DeviceController extends Controller
         return view('device.sell', $data);
     }
 
+    // fungsi jual perangkat
     public function sellDeviceToCustomer($id, Request $request)
     {
         $customer_id = DB::table('customers')->insertGetId([
@@ -285,6 +310,7 @@ class DeviceController extends Controller
         return redirect('/device/out');
     }
 
+    // controller halaman customer
     public function customer()
     {
         if (auth()->user()->role == "team-field") {
@@ -303,6 +329,7 @@ class DeviceController extends Controller
         return view('device.customer', $data);
     }
 
+    // fungsi hapus perangkat
     public function deleteDevice($id)
     {
         DB::table('devices')
